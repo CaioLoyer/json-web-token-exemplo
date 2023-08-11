@@ -25,7 +25,7 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios"] })
 );
 
 app.get('/autenticar', async function(req, res){
@@ -37,12 +37,25 @@ app.get('/', async function(req, res){
 })
 
 app.post('/logar', (req, res) => {
-  res.send("tururururu")
-  
+  if (req.body.usuario == "baldur" && req.body.senha == "1234"){
+    let id = "1";
+    const token = jwt.sign({id }, process.env.SECRET, {
+      expiresIn:300
+    })
+    res.cookie('auroradon', token, {httpOnly:true})
+    return res.json({
+      usuario: req.body.usuario,
+      token:token
+    })
+  }
+  res.status(500).json({mensagem :"not today bro"})
 })
 
 app.post('/deslogar', function(req, res) {
-  
+  res.cookie('auroradon', null, {httpOnly:true});
+  res.json({
+    deslogado:true
+  })
 })
 
 app.listen(3000, function() {
