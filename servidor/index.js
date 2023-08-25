@@ -19,45 +19,67 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static('public'));
 
-app.use(cookieParser());
+app.use(cookieParser());//
 app.use(
   expressJWT({
     secret: process.env.SECRET,
-    algorithms: ["HS256"],
+    algorithms: ["HS256"],//usa pra fazer criptografia
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar","/usuarios","/usuario/cadastrar"] })
 );
 
 app.get('/autenticar', async function(req, res){
   res.render('autenticar');
 })
 
+app.get('/usuarios', async function(req, res){
+  res.render('usuarios');
+})
+
 app.get('/', async function(req, res){
-  res.render("home")
+  res.render('home')
 })
 
 app.post('/logar', (req, res) => {
-  if (req.body.usuario == "baldur" && req.body.senha == "1234"){
-    let id = "1";
-    const token = jwt.sign({id }, process.env.SECRET, {
-      expiresIn:300
+  if (req.body.usuario == "caio" && req.body.senha == "777"){
+    let id ="1";
+
+    const token = jwt.sign({id }, process.env.SECRET,{ 
+      expiresIn:3003
     })
-    res.cookie('auroradon', token, {httpOnly:true})
-    return res.json({
+    res.cookie('token',token, {httpOnly:true});
+     return res.json({
       usuario: req.body.usuario,
-      token:token
-    })
+      senha : req.body.senha,
+      token: token
+     })
   }
-  res.status(500).json({mensagem :"not today bro"})
+ res.status(500).json({mensagem :"Erro"})
 })
 
-app.post('/deslogar', function(req, res) {
-  res.cookie('auroradon', null, {httpOnly:true});
-  res.json({
-    deslogado:true
-  })
+app.get('/usuario/cadastrar', async function(req, res){
+  res.render('usuario/cadastrar');
+})
+
+app.post('/usuario/cadastrar', (req, res) => {
+  try {
+     usuario.create(req.body);
+    res.redirect('/usuarios')
+} catch (err) {
+    console.error(err);
+    res.status(500).json({mensagem :"that words are not in my grimore of origin"})
+}
+  
+})
+
+
+app.post('/deslogar', function(req, res) { //quando é para deslogar deleta o TOKEN
+  res.cookie('token', null, {httpOnly:true});
+   res.json({
+   deslogado:true
+   })
 })
 
 app.listen(3000, function() {
-  console.log('App de Exemplo escutando na porta 3000!')
+  console.log('App funcionando na porta 3000!')
 });
