@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Cadastro</title>
+</head>
+<body>
+  <form class="form" action="/usuario/cadastrar" method="POST">
+
+    <p name="tituloForm">Formulário de Cadastro</p>
+    
+      <label>Nome de Usuário</label>
+    <input required class="" type="text" name="nome" placeholder="nome"/> 
+
+      <label>Senha de Acesso</label>  
+    <input required class="" type="password" name="senha" placeholder="senha"/>
+
+    <label>Confirmar Senha</label>  
+    <input required class="" type="password" name="senha" placeholder="senha"/>
+
+    <input type="submit" name="enviar"/>
+  </form>
+</body>
+</html>

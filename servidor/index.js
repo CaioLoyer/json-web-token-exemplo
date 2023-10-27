@@ -19,29 +19,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static('public'));
 
-app.use(cookieParser());//
+app.use(cookieParser());
 app.use(
   expressJWT({
     secret: process.env.SECRET,
-    algorithms: ["HS256"],//usa pra fazer criptografia
+    algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar","/usuarios","/usuario/cadastrar"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios/cadastrar", "/usuarios/listar"] })
 );
 
 app.get('/autenticar', async function(req, res){
   res.render('autenticar');
 })
 
-app.get('/usuarios', async function(req, res){
-  res.render('usuarios');
-})
 
 app.get('/', async function(req, res){
   res.render('home')
 })
 
 app.post('/logar', (req, res) => {
-  if (req.body.usuario == "caio" && req.body.senha == "777"){
+  if (req.body.nome == "caio" && req.body.senha == "123"){
     let id ="1";
 
     const token = jwt.sign({id }, process.env.SECRET,{ 
@@ -49,7 +46,7 @@ app.post('/logar', (req, res) => {
     })
     res.cookie('token',token, {httpOnly:true});
      return res.json({
-      usuario: req.body.usuario,
+      nome: req.body.nome,
       senha : req.body.senha,
       token: token
      })
@@ -57,11 +54,11 @@ app.post('/logar', (req, res) => {
  res.status(500).json({mensagem :"Erro"})
 })
 
-app.get('/usuario/cadastrar', async function(req, res){
-  res.render('usuario/cadastrar');
+app.get('/usuarios/cadastrar', async function(req, res){
+  res.render('cadastrar');
 })
 
-app.post('/usuario/cadastrar', (req, res) => {
+app.post('/usuarios/cadastrar', (req, res) => {
   try {
      usuario.create(req.body);
     res.redirect('/usuarios')
@@ -73,7 +70,7 @@ app.post('/usuario/cadastrar', (req, res) => {
 })
 
 
-app.post('/deslogar', function(req, res) { //quando é para deslogar deleta o TOKEN
+app.post('/deslogar', function(req, res) {
   res.cookie('token', null, {httpOnly:true});
    res.json({
    deslogado:true
