@@ -46,9 +46,7 @@ app.post('/usuarios/cadastrar', async function(req, res){
   
   if(req.body.senha == req.body.confirmar){
     let usercrypto = req.body
-  
     usercrypto.senha = crypto.encrypt(req.body.senha);
-
     await usuario.create(usercrypto);
     res.redirect('usuarios/listar')
   } else {
@@ -63,7 +61,8 @@ let lista = await usuario.findAll()
 
 
 app.post('/logar', async (req, res) => {
-  const dados = await usuario.findOne({ where: {nome: req.body.nome, senha: crypto.encrypt(req.body.senha)}})
+  const dados = await usuario.findOne
+  ({ where: {nome: req.body.nome, senha: crypto.encrypt(req.body.senha)}})
 
   if(dados){
   const id = dados.id;

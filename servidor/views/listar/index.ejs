@@ -9,5 +9,14 @@
 </head>
 <body>
   <h1>Home</h1>
+
+  <% criatura.forEach((usuario) => { %>
+    <%= usuario.name %>
+    <%= usuario.senha %>
+  <% }) %>
+
+  <form action="/deslogar" method="post">
+    <input type="submit" name="Log Out"/>
+
 </body>
 </html>
