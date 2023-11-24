@@ -1,15 +1,14 @@
-// JWT
 require("dotenv-safe").config();
 const jwt = require('jsonwebtoken');
 var { expressjwt: expressJWT } = require("express-jwt");
 const cors = require('cors');
-
+const crypto = require('./crypto');
 var cookieParser = require('cookie-parser')
 
 const express = require('express');
 const { usuario } = require('./models');
 
-const crypto = require('./crypto');
+
 
 const app = express();
 
@@ -27,7 +26,7 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios/cadastrar", "/usuarios/listar"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/cadastrar", "/listar"] })
 );
 
 app.get('/autenticar', async function(req, res){
@@ -48,31 +47,37 @@ app.post('/usuarios/cadastrar', async function(req, res){
     let usercrypto = req.body
     usercrypto.senha = crypto.encrypt(req.body.senha);
     await usuario.create(usercrypto);
-    res.redirect('usuarios/listar')
+    res.redirect('/usuarios/listar')
   } else {
     res.status(500).json({mensagem:"Erro nas Senhas"})
   }
 })
 
 app.get('/usuarios/listar', async function(req, res){
-let lista = await usuario.findAll() 
-  res.render('listar', { lista});
-})
+  try{
+    var lista = await usuario.findAll();
+    res.render('listar', { lista });
+    
+  }
+    catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'erro'});
+    }
+  });
+
 
 
 app.post('/logar', async (req, res) => {
-  const dados = await usuario.findOne
-  ({ where: {nome: req.body.nome, senha: crypto.encrypt(req.body.senha)}})
-
-  if(dados){
-  const id = dados.id;
-  const token = jwt.sign({ id }, process.env.SECRET, {
-    expiresIn: 3003
-  })
-  res.cookie("token", token, {httpOnly: true});
+  const user = await usuario.findOne ({ where: { nome: req.body.nome, senha: crypto.encrypt(req.body.senha)}});
+  if (user){
+    const id ="1";
+    const token = jwt.sign({id}, process.env.SECRET,{ 
+    expiresIn:3003
+    })
+  res.cookie("token", token, {httpOnly: true})
   return res.json({
     nome: req.body.nome,
-    token: token,
+    token: token
   })
 }
   res.status(500).json({mensagem:"Login Inválido"})
@@ -81,7 +86,7 @@ app.post('/logar', async (req, res) => {
 app.post('/deslogar', function(req, res) {
   res.cookie('token', null, {httpOnly: true});
   res.json({
-    deslogado: true
+    deslogar: true
   })
 })
 

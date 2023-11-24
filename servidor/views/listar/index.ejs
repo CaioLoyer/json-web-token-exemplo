@@ -8,15 +8,18 @@
   <title>Home</title>
 </head>
 <body>
-  <h1>Home</h1>
-
-  <% criatura.forEach((usuario) => { %>
-    <%= usuario.name %>
-    <%= usuario.senha %>
-  <% }) %>
+  
+  <h1 id="userstitulo">Usuários Cadastrados</h1>
 
   <form action="/deslogar" method="post">
-    <input type="submit" name="Log Out"/>
-
+    <input type="submit" value="Log Out" id="btnlogout"/>
+    
+  <div class="userlist">
+  <% lista.forEach((usuario) => { %>
+    <%= usuario.nome %><br/>
+    <%= usuario.senha %><br/>
+  <p></p>
+<% }) %>
+</div>
 </body>
 </html>

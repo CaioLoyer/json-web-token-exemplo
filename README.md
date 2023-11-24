@@ -1,1 +1,0 @@
-# Estava utilizando uma cópia deste repositório para uma atividade de "GERÊNCIA E CONFIGURAÇÕES DE SERVIÇOS DE INTERNET", porem, rotomei o uso deste repositório devido a erros do github pages com o algoritmo de criptografia (os commits que foram feitos a partir de setembro estavam sendo realisados naquele repositório)
