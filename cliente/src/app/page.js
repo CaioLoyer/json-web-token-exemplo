@@ -29,8 +29,9 @@ export default function Login() {
   return (
     <div>
       <h1>Login</h1>
+      
       <form onSubmit={handlerLogin}>
-      <input
+      <input id="formesquerda"
           placeholder='Nome'
           type="text"
           onChange={(e) => { setUser({ ...user, nome: e.target.value }) }} />
@@ -38,7 +39,7 @@ export default function Login() {
           placeholder='Senha'
           type='password'
           onChange={(e) => { setUser({ ...user, senha: e.target.value }) }} />
-        <button>Entrar</button>
+        <button id="enviar">Entrar</button>
       </form>
       <ToastContainer/>
     </div>

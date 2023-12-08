@@ -1,4 +1,4 @@
-
+import "./style/style.css"
 
 export const metadata = {
   title: 'Register users',

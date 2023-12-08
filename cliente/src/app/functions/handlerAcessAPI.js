@@ -19,7 +19,7 @@ const getUserAuthenticated = async (user) => {
         return userAuth;
 }
 
-const getUsers = async(user) =>{
+const getUsers = async() =>{
     const token = cookies().get('token')?.value;
    try{ 
     const responseOfApi = await fetch(url +"/usuarios/listar",
