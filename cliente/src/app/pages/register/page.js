@@ -1,68 +1,74 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import { postUser } from '@/app/functions/handlerAcessAPI';
+import styles from "./style.css";
 
 export default function formReg(){
   const [user, setUser] = useState({
     nome: '',
     senha: '',
+    confirmar: '',
   });
   const { push } = useRouter();
+  const { refresh } = useRouter();
+
+  useEffect(() => {
+    const newUser = JSON.parse(localStorage.getItem("registrarUser"));
+    if (newUser) {
+      setUser(newUser);
+    }
+  }, []);
 
 
-  const handlerLogin = async (e) => {
+  const handlerRegister  = async (e) => {
     e.preventDefault();
     try{
       await postUser(user);
+      toast.error("Npvp Usuario Registrado")
       return push('/pages/dashboard');
     }catch{
-          return toast.error("Erro na Aplicação");
+      refresh();
+      return toast.error("Erro na Aplicação");
     }
   };
 
-  return (
-    <div classnome="login">
-      <div classnome="card-header">
-        <h1>Registrar Dados</h1>
-      </div>
-      <div classnome="b">
-        <form classnome="card" onSubmit={handlerLogin}>
+  return(
+    <div id="formRegister">
+        <h1>Registrar Novo Usuário</h1>
+        <div id='campos'>
+        <form classnome="card" onSubmit={handlerRegister}>
         <div classnome="card-content">
         <div classnome="card-content-area">
             <input
                 placeholder="Nome"
-                type="nome"
-                onChange={(e) => {
-                  setUser({ ...user, nome: e.target.value });
+                type="text"
+                onChange={(e) => {setUser({ ...user, nome: e.target.value });
                 }}>
             </input>
             </div>
-
-          
-            
-
-            <div classnome="card-content-area">
+            <div className="card-content-area">
             <input
                 placeholder="Senha"
-                type="senha"
-                onChange={(e) => {
-                  setUser({ ...user, senha: e.target.value });
+                type="password"
+                onChange={(e) => {setUser({ ...user, senha: e.target.value });
                 }}>
             </input>
-            </div>
-          </div>
-          
-          <button>Registrar</button>
+            <input
+                placeholder="Confirmar Senha"
+                type="password"
+                onChange={(e) => {setUser({ ...user, confirmar: e.target.value });
+                }}>
+            </input>
+            </div>     
+          <button id='enviar'>Registrar</button>          
           <ToastContainer />
+          </div>
         </form>
-        <p>
-          <Link href="/pages/dashboard">Dashboard</Link>
-        </p>
-      </div>
+        </div>
     </div>
   );
 };

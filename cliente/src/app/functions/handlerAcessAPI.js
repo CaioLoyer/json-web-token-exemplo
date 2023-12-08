@@ -4,26 +4,9 @@ import { cookies } from "next/dist/client/components/headers";
 
 const url ="http://localhost:4000";
 
-const postUser = async (user) =>{
-    try{
-        const responseOfApi = await fetch(url +"/usuarios/cadastrar",
-        {
-           method:"POST",
-           headers:{"Content-Type":"Application/json"},
-           body: JSON.stringify(user)
-        }
-        );
-        const userSave = await responseOfApi.json();
-        return userSave;
-    }catch{
-        return null
-    }
-}
-
 const getUserAuthenticated = async (user) => {
     console.log(user)
-    try{
-         const responseOfApi = await fetch(url +"/logar",
+         const responseOfApi = await fetch(url + "/logar",
          {
             cache:"no-cache",
             method:"POST",
@@ -34,13 +17,10 @@ const getUserAuthenticated = async (user) => {
         const userAuth = await responseOfApi.json();
         console.log(userAuth)
         return userAuth;
-       
-    }catch{
-        return null
-    }
 }
-const getUsers = async() =>{
-    const token = cookies().get("token")?.value;
+
+const getUsers = async(user) =>{
+    const token = cookies().get('token')?.value;
    try{ 
     const responseOfApi = await fetch(url +"/usuarios/listar",
     {
@@ -48,13 +28,31 @@ const getUsers = async() =>{
         headers:{"Content-Type":"Application/json"},
         Cookie: `token=${token}`
      } 
-);
-    const listUsers = responseOfApi.json();
+)
+    const listUsers = await responseOfApi.json();
+    console.log(listUsers)
     return listUsers;
 
     } catch{ 
-        return null 
+        return null
 }
 }
 
-export { getUsers, getUserAuthenticated ,postUser};
+
+const postUser = async(user) =>{
+    const token = cookies().get('token')?.value;
+    try{
+        const responseOfApi = await fetch(url+ "/usuarios/cadastrar", {
+           method:"POST",
+           headers:{"content-Type":"Application/json"},
+           body: JSON.stringify(user)
+        }
+        );
+        const userSave = await responseOfApi.json();
+        return userSave;
+    }catch{
+        return null
+    }
+}
+
+export { getUsers, getUserAuthenticated, postUser};

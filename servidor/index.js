@@ -3,12 +3,11 @@ const jwt = require('jsonwebtoken');
 var { expressjwt: expressJWT } = require("express-jwt");
 const cors = require('cors');
 const crypto = require('./crypto');
-var cookieParser = require('cookie-parser')
 
 var corsOperation = {
    origin:"https://localhost:3000",
-   methods: "GET,POST,PUT,DELETE",
-   allowedHeaders:"Content-Type,Authorization",
+   methods: "GET, POST, PUT, DELETE",
+   allowedHeaders:"Content-Type, Authorization",
    credentials: true
 }
 
@@ -17,6 +16,7 @@ const { usuario } = require('./models');
 
 
 
+var cookieParser = require('cookie-parser')
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -33,7 +33,7 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/cadastrar", "/listar"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios/cadastrar", "/usuarios/listar"] })
 );
 
 app.get('/autenticar', async function(req, res){
@@ -63,7 +63,7 @@ app.post('/usuarios/cadastrar', async function(req, res){
 app.get('/usuarios/listar', async function(req, res){
   try{
     var lista = await usuario.findAll();
-    res.json(lista );
+    res.json(lista);
     
   }
     catch (err) {
@@ -75,8 +75,7 @@ app.get('/usuarios/listar', async function(req, res){
 
 
 app.post('/logar', async (req, res) => {
-  const user = await usuario.findOne ({ 
-    where: { nome: req.body.nome, senha: crypto.encrypt(req.body.senha) 
+  const user = await usuario.findOne ({ where: { nome: req.body.nome, senha: crypto.encrypt(req.body.senha) 
     } });
   if(user) {
     const id = 1;
@@ -93,7 +92,7 @@ app.post('/logar', async (req, res) => {
 app.post('/deslogar', function(req, res) {
   res.cookie('token', null, {httpOnly: true});
   res.json({
-    deslogar: true
+    deslogar:true
   })
 })
 

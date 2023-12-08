@@ -19,7 +19,9 @@ export default function Login() {
       toast.error("Erro no nome ou senha!")
     }
       push('/pages/dashboard');
+      localStorage.setItem('nome', userAuth.nome)
     } catch {
+      refresh()
       toast.error ('A aplicação deu erro')
     }
   }
@@ -29,17 +31,15 @@ export default function Login() {
       <form onSubmit={handlerLogin}>
       <input
           placeholder='Nome'
-          type="name"
-          onChange={(e) => { setUser({ ...user, nome: e.target.value }) }}>
-        </input>
+          type="text"
+          onChange={(e) => { setUser({ ...user, nome: e.target.value }) }} />
         <input
           placeholder='Senha'
-          type='senha'
-          onChange={(e) => { setUser({ ...user, senha: e.target.value }) }}>
-        </input>
+          type='password'
+          onChange={(e) => { setUser({ ...user, senha: e.target.value }) }} />
         <button>Entrar</button>
-        <ToastContainer/>
       </form>
+      <ToastContainer/>
     </div>
   )
 }
