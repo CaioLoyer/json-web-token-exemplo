@@ -1,4 +1,10 @@
-.userlist{
+body{
+  background-color: rgb(61, 108, 116);
+  text-decoration: none;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+#userlist{
     color: white;
     border: 2px solid white;
     border-radius: 30px;
@@ -8,5 +14,6 @@
     padding-top: 20px;
     margin-left: 470px;
     max-width: 200px;
+    color: blueviolet;
   }
   

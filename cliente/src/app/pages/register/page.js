@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Link from 'next/link';
 import { postUser } from '@/app/functions/handlerAcessAPI';
 import styles from "./style.css";
 
@@ -24,11 +23,11 @@ export default function formReg(){
   }, []);
 
 
-  const handlerRegister  = async (e) => {
-    e.preventDefault();
+  const handlerRegister  = async (event) => {
+    event.preventDefault();
     try{
       await postUser(user);
-      toast.error("Npvp Usuario Registrado")
+      toast.error("Novo Usuario Registrado")
       return push('/pages/dashboard');
     }catch{
       refresh();
@@ -58,7 +57,7 @@ export default function formReg(){
                 }}>
             </input>
             <input
-                placeholder="Confirmar Senha"
+                placeholder="Confirmar"
                 type="password"
                 onChange={(e) => {setUser({ ...user, confirmar: e.target.value });
                 }}>

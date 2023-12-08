@@ -7,10 +7,12 @@ export default async function Dashboard() {
     const users = await getUsers();
     return (
         <div>
+            <div id="userlist">
                     <h1>Dashboard</h1>
             <Suspense fallback={<p>carregando...</p>}>
                  <ListUser users={users}/>
-            </Suspense>     
+            </Suspense> 
+            </div>    
         </div>
     );
 };

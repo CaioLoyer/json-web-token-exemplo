@@ -8,7 +8,6 @@ export const middleware = async (request) => {
     const urlLogin = new URL('/', request.url);
     const isTokenValidated = validateToken(token);
     const urlDashboard = new URL('/pages/dashboard', request.url);
-    const urlRegister = new URL('/pages/register', request.url)
 
     if (!isTokenValidated || !token) {
         if (request.nextUrl.pathname === '/pages/dashboard') {
